@@ -23,6 +23,7 @@ namespace ChatApp
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {            
             app.UseDeveloperExceptionPage();
+            app.UseStaticFiles();
 
             app.UseMvcWithDefaultRoute();           //for default routing
             // app.UseEndpoints(endpoints =>
