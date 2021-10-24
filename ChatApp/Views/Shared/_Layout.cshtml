@@ -13,14 +13,13 @@
     <body>
         <partial name="_Navbar" />
         <div class="main">
-           <partial name="_SideMenu" />
-           
+           <vc:room></vc:room>           
             <div class ="chat" >
                 @RenderBody()
             </div> 
         </div>
         <div class="modal" id="create-room-modal">
-            <form asp-controller="" asp-action="" class="modal-body">
+            <form asp-controller="Chat" asp-action="CreateRoom" class="modal-body">
                 <button type="button" class="btn-close" onclick="closeModal()">X</button>
                 <header>Create Room</header>
                 <div>

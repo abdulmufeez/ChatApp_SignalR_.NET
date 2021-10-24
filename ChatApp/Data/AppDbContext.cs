@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using ChatApp.Models;
+using System.Threading.Tasks;
+using System;
 
 namespace ChatApp.Data {
     public class AppDbContext : IdentityDbContext<User> {           //Getting help from identityclass with user
