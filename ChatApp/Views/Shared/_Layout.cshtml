@@ -11,7 +11,6 @@
     </head>
 
     <body>
-        
         <partial name="_Navbar" />
         <div class="main">
            <partial name="_SideMenu" />
@@ -20,6 +19,17 @@
                 @RenderBody()
             </div> 
         </div>
-                
+        <div class="modal" id="create-room-modal">
+            <form asp-controller="" asp-action="" class="modal-body">
+                <button type="button" class="btn-close" onclick="closeModal()">X</button>
+                <header>Create Room</header>
+                <div>
+                    <input name="name">
+                </div>
+                <footer><button class="btn-create">Create</button></footer>
+            </form>
+        </div>
+        <script src="~/js/site.js"></script>
+        @RenderSectionAsync("Scripts",false)
     </body>  
 </html>

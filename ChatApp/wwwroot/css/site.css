@@ -119,6 +119,80 @@ body {
     flex-grow: 2;
 }
 
-.chat-input > input {
+.chat-input > button {
     flex-grow: 1;
 }
+
+.modal {
+    display: none;
+    position: fixed;
+    min-height: 100vh;
+    min-width: 100vw;
+    z-index: 200;
+    top: 0;
+    left: 0;
+    background-color: rgba(0.2, 0.2, 0.2, 0.8);
+  }
+  
+  .modal.active {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .modal-body > .btn-close {
+    position: absolute;
+    color : white;
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 5px;
+    right: 5px;
+    margin-top: 0;
+    border-radius: 5px;
+    border: 0 1px 3px 1px #333;
+    background-color: #57446b;
+    text-align: center;
+  }
+  
+  .modal-body {
+    position: relative;
+    min-width: 300px;
+    display: flex;
+    flex-direction: column;
+    background-color: #5c4773;
+    padding: 1rem;
+    border-radius: 5px;
+    border: 0 1px 3px 1px #333;    
+  }
+  
+  .modal-body > * {
+    margin-top: 0.75rem;
+  }
+  
+  .modal-body > header {
+    color: #fff;
+    font-size: 24px;
+  }
+  
+  .modal-body > div > input {
+    width: 100%;
+  }
+  
+  .modal-body > footer {
+    text-align: center;
+  }
+
+  .modal-body > footer > .btn-create {
+    
+    color : white;
+    text-decoration: none;
+    justify-content: center;
+    align-items: center;
+    margin-top: 0;
+    border-radius: 5px;
+    border: 0 1px 3px 1px #333;
+    background-color: #57446b;
+    text-align: center;
+  }

@@ -17,17 +17,15 @@ namespace ChatApp
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
-        public IConfiguration Configuration { get; }
+        public IConfiguration _config { get; set; }
+        public Startup(IConfiguration config) => _config = config;            //this configuartions is created specially for npgsql
+                
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc(option => option.EnableEndpointRouting = false);              //for Model-view-controller
-            services.AddDbContext<AppDbContext>(p => p.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));   //telling database to configure database using AppDbContext
+            services.AddDbContext<AppDbContext>(options => options.UseNpgsql(_config.GetConnectionString("DefaultConnection")));   //telling database to configure database using AppDbContext
             services.AddIdentity<User, IdentityRole>()                                      //Adding users as user role using IdentityRole
             .AddEntityFrameworkStores<AppDbContext>()
             .AddDefaultTokenProviders();
