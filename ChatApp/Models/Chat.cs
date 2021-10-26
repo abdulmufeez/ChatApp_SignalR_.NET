@@ -8,5 +8,7 @@ namespace ChatApp.Models
         public ICollection<Message> Messages { get; set; }        
         public ICollection<User> Users { get; set; }        
         public ChatType ChatType { get; set; }
+
+        
     }
 }
