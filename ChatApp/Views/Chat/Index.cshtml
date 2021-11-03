@@ -6,7 +6,7 @@
         <div class="message"><p style="text-align:center; font-size:20px; ">There is no message yet :)</p></div>
     }
     else
-    {
+    { 
         @foreach (var message in Model.Messages)
         {
         <div class="message">        
@@ -15,7 +15,7 @@
             <footer>@message.TimeStamp.ToShortTimeString()</footer>
         </div>
         }
-    }                
+    }                 
 </div>
 <form class="chat-input" asp-controller="Chat" asp-action="SendMessage" method="post">
     @Html.HiddenFor(model => model.Id)

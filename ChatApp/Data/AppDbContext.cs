@@ -10,5 +10,15 @@ namespace ChatApp.Data {
 
         public DbSet<ChatApp.Models.Chat> Chats { get; set; }
         public DbSet<Message> Messages { get; set; }
+        public DbSet<ChatUser> ChatUsers { get; set; }
+
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+
+            builder.Entity<ChatUser>()
+            .HasKey(entity => new {entity.ChatId, entity.UserId});
+        }
     }
 }

@@ -26,7 +26,13 @@ namespace ChatApp
         {
             services.AddMvc(option => option.EnableEndpointRouting = false);              //for Model-view-controller
             services.AddDbContext<AppDbContext>(options => options.UseNpgsql(_config.GetConnectionString("DefaultConnection")));   //telling database to configure database using AppDbContext
-            services.AddIdentity<User, IdentityRole>()                                      //Adding users as user role using IdentityRole
+            services.AddIdentity<User, IdentityRole>( options => {
+                options.Password.RequireDigit = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequiredLength = 6;
+            })                                      //Adding users as user role using IdentityRole
             .AddEntityFrameworkStores<AppDbContext>()
             .AddDefaultTokenProviders();
         }
@@ -36,6 +42,7 @@ namespace ChatApp
         {            
             app.UseDeveloperExceptionPage();
             app.UseStaticFiles();                   //for using CSS files 
+            app.UseAuthentication();                //for authentication like signin and login user roles
 
             app.UseMvcWithDefaultRoute();           //for default routing
             // app.UseEndpoints(endpoints =>
