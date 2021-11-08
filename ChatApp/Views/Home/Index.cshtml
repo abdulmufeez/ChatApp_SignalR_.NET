@@ -1,1 +1,14 @@
-<h1>ChatApp</h1>
+@model IEnumerable<Chat>
+
+<div class="chat-body"> 
+    @if (!Model.Any())
+    {
+        <a class="room-botton">There is no chat available</a>          
+    }  
+    else
+    {
+        @foreach (var chats in Model){
+        <a class="room-botton" asp-controller="Chat" asp-action ="GetChat" asp-route-id = "@chats.Id" >@chats.Name</a>          
+        }
+    }             
+</div>

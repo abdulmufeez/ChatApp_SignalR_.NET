@@ -2,8 +2,8 @@
 
 <div class="side-menu">
     <a class="room-botton" id="create-room-btn" href="#"><strong>+</strong></a>
-    @foreach (var item in Model)
+    @foreach (var Chats in Model)
     {
-        <a class="room-botton" asp-controller="Chat" asp-action ="GetChat" asp-route-id = "@item.Id" >@item.Name</a>          
+        <a class="room-botton" asp-controller="Chat" asp-action ="GetChat" asp-route-id = "@Chats.Id" >@Chats.Name</a>          
     }
 </div>

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using ChatApp.Data;
@@ -19,7 +20,7 @@ namespace ChatApp.Controllers
         public IActionResult Index() => View();
 
         [HttpPost]
-        public async Task<IActionResult> CreateRoom(string name)
+        public async Task<IActionResult> CreateGroup(string name)
         {
             var chat = new Models.Chat{
                 Name = name,
@@ -31,7 +32,7 @@ namespace ChatApp.Controllers
                 Role = UserRole.Admin
             });
 
-            await _context.AddAsync(chat);
+            await _context.Chats.AddAsync(chat);
 
             await _context.SaveChangesAsync();
             return RedirectToAction("Index","Home");
@@ -58,6 +59,22 @@ namespace ChatApp.Controllers
         await _context.Messages.AddAsync(Message);
         await _context.SaveChangesAsync();
         return RedirectToAction("GetChat", new { id = Id});
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> JoinGroup(int id)
+        {
+             var chatUser = new ChatUser {
+                ChatId = id,
+                UserId = User.FindFirst(ClaimTypes.NameIdentifier).Value,       //i don't what is happening here
+                Role = UserRole.Admin
+            };
+
+            await _context.ChatUsers.AddAsync(chatUser);
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("GetChat", new {id = id});
         }
     }    
 }

@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using ChatApp.Data;
 using Microsoft.AspNetCore.Mvc;
@@ -12,7 +13,13 @@ namespace ChatApp.ViewComponents{
         public RoomViewComponent(AppDbContext context) => _context = context;
         
         public async Task<IViewComponentResult> InvokeAsync(){
-            var chatsInDb = await _context.Chats.ToListAsync();
+            var chatUser = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            
+            var chatsInDb = await _context.ChatUsers
+            .Include(chatuser => chatuser.Chat)
+            .Where(chatuser => chatuser.UserId == chatUser)
+            .Select(chatuser => chatuser.Chat)
+            .ToListAsync();
             return View(chatsInDb);
         }
     }
