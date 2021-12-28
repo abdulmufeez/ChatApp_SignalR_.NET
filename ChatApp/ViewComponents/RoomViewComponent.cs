@@ -16,10 +16,10 @@ namespace ChatApp.ViewComponents{
             var chatUser = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
             
             var chatsInDb = await _context.ChatUsers
-            .Include(chatuser => chatuser.Chat)
-            .Where(chatuser => chatuser.UserId == chatUser)
-            .Select(chatuser => chatuser.Chat)
-            .ToListAsync();
+                .Include(chatuser => chatuser.Chat)
+                .Where(chatuser => chatuser.UserId == chatUser)
+                .Select(chatuser => chatuser.Chat)
+                .ToListAsync();
             return View(chatsInDb);
         }
     }

@@ -1,21 +1,25 @@
 @model Chat
 
 <div class="chat-body">
-    @* @if (!Model.Messages.)
+    @if(Model != null)
     {
-        <div class="message"><p style="text-align:center; font-size:20px; ">There is no message yet :)</p></div>
-    }
-    else
-    {  *@
-        @foreach (var message in Model.Messages)
+        @if (!Model.Messages.Any())
         {
-        <div class="message">        
-            <header>@message.UserName:</header>
-            <p>@message.Text</p>
-            <footer>@message.TimeStamp.ToShortTimeString()</footer>
-        </div>
+            <div class="message"><p style="text-align:center; font-size:20px; ">There is no message yet :)</p></div>
         }
-                    
+        else
+        {  
+            @foreach (var message in Model.Messages)
+            {
+                <div class="message">        
+                    <header>@message.UserName:</header>
+                    <p>@message.Text</p>
+                    <footer>@message.TimeStamp.ToShortTimeString()</footer>
+                </div>
+            }
+        }   
+    }
+                
 </div>
 <form class="chat-input" asp-controller="Chat" asp-action="SendMessage" method="post">
     @Html.HiddenFor(model => model.Id)

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using ChatApp.Data;
@@ -17,7 +18,18 @@ namespace ChatApp.Controllers
 
         public ChatController(AppDbContext context) => _context = context;
         
-        public IActionResult Index() => View();
+        public IActionResult Index() => View(); 
+
+        // public async Task<IActionResult> Index() 
+        // {
+        //     var chatsInDb = await _context.Chats
+        //         .Include(x => x.Users)
+        //         .Where(model => !model.Users
+        //             .Any(y => y.UserId == User.FindFirst(ClaimTypes.NameIdentifier).Value))
+        //         .ToListAsync();            
+            
+        //     return View(chatsInDb);
+        // }
 
         [HttpPost]
         public async Task<IActionResult> CreateGroup(string name)
@@ -28,7 +40,8 @@ namespace ChatApp.Controllers
             };
 
             chat.Users.Add(new ChatUser {
-                UserId = User.FindFirst(ClaimTypes.NameIdentifier).Value,       //i don't what is happening here
+                UserId = User.FindFirst(ClaimTypes.NameIdentifier).Value,       //i don't what is happening here 
+                                                                                //i think it basically take out the id of user crated when registration
                 Role = UserRole.Admin
             });
 
