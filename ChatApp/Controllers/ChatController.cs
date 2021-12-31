@@ -14,6 +14,8 @@ namespace ChatApp.Controllers
     [Authorize]
     public class ChatController : Controller
     {
+        //User.FindFirst(ClaimTypes.NameIdentifier).Value
+        //basically this line of code get the name of the current signedin user
         private readonly AppDbContext _context;
 
         public ChatController(AppDbContext context) => _context = context;
@@ -29,8 +31,8 @@ namespace ChatApp.Controllers
         //         .ToListAsync();            
             
         //     return View(chatsInDb);
-        // }
-
+        // }        
+        
         [HttpPost]
         public async Task<IActionResult> CreateGroup(string name)
         {
@@ -51,6 +53,29 @@ namespace ChatApp.Controllers
             return RedirectToAction("Index","Home");
         }
 
+        [HttpPost]
+        public async Task<IActionResult> CreatePrivateGroup(string userId)
+        {
+            var chat = new Models.Chat{                
+                ChatType = ChatType.Private
+            };
+
+            chat.Users.Add(new ChatUser{
+                UserId = userId,
+                Role = UserRole.Member              
+            });
+
+            chat.Users.Add(new ChatUser{
+                UserId = User.FindFirst(ClaimTypes.NameIdentifier).Value,
+                Role = UserRole.Admin                
+            });
+
+            await _context.Chats.AddAsync(chat);
+
+            await _context.SaveChangesAsync();
+            return RedirectToAction("GetChat","Home", new { id = chat.Id });        //after calling savechanges function 
+                                                                                    //_context will automatically assigned chatId to specific chat id
+        }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetChat(int id) => 
@@ -80,7 +105,7 @@ namespace ChatApp.Controllers
              var chatUser = new ChatUser {
                 ChatId = id,
                 UserId = User.FindFirst(ClaimTypes.NameIdentifier).Value,       //i don't what is happening here
-                Role = UserRole.Admin
+                Role = UserRole.Member
             };
 
             await _context.ChatUsers.AddAsync(chatUser);

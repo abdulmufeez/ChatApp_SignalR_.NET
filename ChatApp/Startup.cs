@@ -1,4 +1,5 @@
 using ChatApp.Data;
+using ChatApp.Hubs;
 using ChatApp.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -32,9 +33,10 @@ namespace ChatApp
                 options.Password.RequireLowercase = false;
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequiredLength = 6;
-            })                                      //Adding users as user role using IdentityRole
-            .AddEntityFrameworkStores<AppDbContext>()
-            .AddDefaultTokenProviders();
+                })                                      //Adding users as user role using IdentityRole
+                .AddEntityFrameworkStores<AppDbContext>()
+                .AddDefaultTokenProviders();
+            services.AddSignalR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -43,8 +45,19 @@ namespace ChatApp
             app.UseDeveloperExceptionPage();
             app.UseStaticFiles();                   //for using CSS files 
             app.UseAuthentication();                //for authentication like signin and login user roles
-
+            app.UseRouting();
             app.UseMvcWithDefaultRoute();           //for default routing
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapHub<ChatHub>("/chatHub");
+            });
+
+            // app.UseSignalR(routes => 
+            // {
+            //     routes.MapHub<ChatHub>("/chatHub");
+            // });
+             
             // app.UseEndpoints(endpoints =>
             // {
             //     endpoints.MapGet("/", async context =>

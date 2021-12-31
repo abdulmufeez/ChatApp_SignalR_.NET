@@ -18,6 +18,7 @@ namespace ChatApp.ViewComponents{
             var chatsInDb = await _context.ChatUsers
                 .Include(chatuser => chatuser.Chat)
                 .Where(chatuser => chatuser.UserId == chatUser)
+                                    //&& chatuser.Chat.ChatType == Models.ChatType.Group)
                 .Select(chatuser => chatuser.Chat)
                 .ToListAsync();
             return View(chatsInDb);

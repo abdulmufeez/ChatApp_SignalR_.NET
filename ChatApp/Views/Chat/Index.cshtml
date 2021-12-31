@@ -21,8 +21,86 @@
     }
                 
 </div>
-<form class="chat-input" asp-controller="Chat" asp-action="SendMessage" method="post">
-    @Html.HiddenFor(model => model.Id)
-    <input type="text" name="message" value=""><br />
+<form class="chat-input" asp-controller="Chat" asp-action="SendMessage" method="post" onsubmit="SendMessage(event)">
+    @* @Html.HiddenFor(model => model.Id)
+    @Html.HiddenFor(model => model.Name) *@
+
+    <input type="hidden" name="chatId" value="@Model.Id">
+    <input type="text" name="message" value="" id="message-text"><br />
     <button type="submit">Send</button>
 </form>
+
+@section script
+{
+    <script src="~/js/signalr.mim.js"></script>
+    <script src="~/js/axios.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+    <script>
+        var connection = new SignalR.HubConnectionBuilder()
+                                        .withUrl("/chatHub")
+                                        .Build();
+        
+        connection.on("MessageRecieve", function(data){
+            //console.log(data);
+
+            var message = document.createElement("div");
+                message.classList.add('message');
+
+            var header = document.createElement("header");
+                header.appendChild(document.createTextNode(data.userName));
+
+            var p = document.createElement("p");
+                p.appendChild(document.createTextNode(data.text));
+
+            var footer = document.createElement("footer");                
+                footer.appendChild(document.createTextNode(date.timeStamp));
+
+            message.appendChild(header);
+            message.appendChild(p;
+            message.appendChild(footer);
+
+            document.querySelector('.chat-body').append(message);
+        })
+
+        var _connectionId = '';
+        
+        var joinGroup = function(){
+            var url = 'SignalRChat/JoinGroup/'+ _connectionId +'/@Model.Id';
+            axios.post(url, null)
+                .then (result => {
+                    console.log("Goup Joined"+ result));
+                })
+                .catch(error => {
+                    console.log("Failed to join group"+ error));
+                })
+        }        
+
+        connection.start()
+            .then(function(){
+                connection.invoke('getConnectionId')
+                    .then(function(connectionId){
+                        _connectionId = connectionId;
+                        joinGroup();
+                    })
+            })
+            .catch(function(err){
+                console.log(err);
+            }) 
+
+        
+        var sendMessage = function(event){
+            event.preventDefault();
+            
+            var data = new FormData(event.target);
+            document.getElementById('message-text').value = '';
+            axios.post('/SignalRChat/SendMessage', data)
+                .then (result => {
+                    console.log("Message Sent", result);
+                })
+                .catch(error => {
+                    console.log("Message doesn't Sent!", error);
+                })
+        }
+    </script>
+}

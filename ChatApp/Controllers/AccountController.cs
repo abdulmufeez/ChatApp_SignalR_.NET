@@ -20,9 +20,9 @@ namespace ChatApp {
 
         [HttpPost]
         public async Task<IActionResult> Login(string username, string password){
-            var user = await _userManager.FindByNameAsync(username);
-            if (user != null) {
-                var result = await _signInManager.PasswordSignInAsync(user, password, false, false);
+            var user = await _userManager.FindByNameAsync(username);            //finding rgistered user by username
+            if (user != null) {                                                 //remember this type of work is done by usermanager
+                var result = await _signInManager.PasswordSignInAsync(user, password, false, false);    //here all signin signout work is done by signmanager
                 if (result.Succeeded)
                 {
                     return RedirectToAction("Index", "Home");
@@ -41,7 +41,7 @@ namespace ChatApp {
                 UserName = username,
 
             };
-            var result = await _userManager.CreateAsync(newUser, password);
+            var result = await _userManager.CreateAsync(newUser, password);         //creating user in db
             if (result.Succeeded)
             {
                 await _signInManager.SignInAsync(newUser,false);
