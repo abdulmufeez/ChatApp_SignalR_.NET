@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using ChatApp.Data;
 using ChatApp.Models;
+using ChatApp.UtilityClassLibrary;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,7 +13,7 @@ using Microsoft.EntityFrameworkCore;
 namespace ChatApp.Controllers
 {
     [Authorize]
-    public class ChatController : Controller
+    public class ChatController : BaseController
     {
         //User.FindFirst(ClaimTypes.NameIdentifier).Value
         //basically this line of code get the name of the current signedin user
@@ -31,8 +32,8 @@ namespace ChatApp.Controllers
         //         .ToListAsync();            
             
         //     return View(chatsInDb);
-        // }        
-        
+        // }                
+
         [HttpPost]
         public async Task<IActionResult> CreateGroup(string name)
         {
@@ -42,7 +43,7 @@ namespace ChatApp.Controllers
             };
 
             chat.Users.Add(new ChatUser {
-                UserId = User.FindFirst(ClaimTypes.NameIdentifier).Value,       //i don't what is happening here 
+                UserId = GetUserId(),       //i don't what is happening here 
                                                                                 //i think it basically take out the id of user crated when registration
                 Role = UserRole.Admin
             });
@@ -66,7 +67,7 @@ namespace ChatApp.Controllers
             });
 
             chat.Users.Add(new ChatUser{
-                UserId = User.FindFirst(ClaimTypes.NameIdentifier).Value,
+                UserId = GetUserId(),
                 Role = UserRole.Admin                
             });
 
@@ -104,7 +105,7 @@ namespace ChatApp.Controllers
         {
              var chatUser = new ChatUser {
                 ChatId = id,
-                UserId = User.FindFirst(ClaimTypes.NameIdentifier).Value,       //i don't what is happening here
+                UserId = GetUserId(),
                 Role = UserRole.Member
             };
 

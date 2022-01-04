@@ -3,6 +3,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using ChatApp.Data;
 using ChatApp.Models;
+using ChatApp.UtilityClassLibrary;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -37,10 +38,11 @@ namespace ChatApp.Controllers{
         // }
 
         //listing all users for private group
+       
         public async Task<IActionResult> Find()
         {
             var users = await _context.Users
-                .Where(u => u.Id != User.FindFirst(ClaimTypes.NameIdentifier).Value)
+                .Where(u => u.Id != User.GetUserId())
                 .ToListAsync();
             
             return View(users);
@@ -54,7 +56,7 @@ namespace ChatApp.Controllers{
                     .ThenInclude(model => model.User)
                 .Where(model => model.ChatType == ChatType.Private
                         && model.Users
-                            .Any(user => user.UserId == User.FindFirst(ClaimTypes.NameIdentifier).Value))
+                            .Any(user => user.UserId == User.GetUserId()))
                 .ToListAsync();
             return View("PrivateChatList", privateChatsInDb);
         }
@@ -66,7 +68,7 @@ namespace ChatApp.Controllers{
                 .Include(model => model.Users)
                 .Where(model => model.ChatType == ChatType.Group
                     && model.Users
-                            .Any(user => user.UserId != User.FindFirst(ClaimTypes.NameIdentifier).Value))
+                            .Any(user => user.UserId != User.GetUserId()))
                 .ToListAsync();
             return View("PublicChatList", privateChatsInDb);
         }

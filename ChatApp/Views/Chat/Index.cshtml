@@ -34,45 +34,53 @@
 {
     <script src="~/js/signalr.mim.js"></script>
     <script src="~/js/axios.min.js"></script>
+    <script src="~/js/messageBuilder.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
     <script>
         var connection = new SignalR.HubConnectionBuilder()
                                         .withUrl("/chatHub")
                                         .Build();
-        
+                
+        var _connectionId = '';        
+
         connection.on("MessageRecieve", function(data){
             //console.log(data);
 
-            var message = document.createElement("div");
-                message.classList.add('message');
+            var message = messageBuilder()
+                .createMessage()
+                .withHeader(data.userName)
+                .withParagraph(data.text)
+                .withFooter(data.timeStamp)
+                .build();
+            @* var message = document.createElement("div");
+                message.classList.add('message'); 
 
             var header = document.createElement("header");
-                header.appendChild(document.createTextNode(data.userName));
+                header.appendChild(document.createTextNode(data.userName)); 
 
             var p = document.createElement("p");
                 p.appendChild(document.createTextNode(data.text));
 
             var footer = document.createElement("footer");                
-                footer.appendChild(document.createTextNode(date.timeStamp));
+                footer.appendChild(document.createTextNode(data.timeStamp));
 
             message.appendChild(header);
-            message.appendChild(p;
-            message.appendChild(footer);
+            message.appendChild(p);
+            message.appendChild(footer); *@
 
             document.querySelector('.chat-body').append(message);
         })
 
-        var _connectionId = '';
-        
+
         var joinGroup = function(){
             var url = 'SignalRChat/JoinGroup/'+ _connectionId +'/@Model.Id';
             axios.post(url, null)
                 .then (result => {
-                    console.log("Goup Joined"+ result));
+                    console.log("Goup Joined"+ result);
                 })
                 .catch(error => {
-                    console.log("Failed to join group"+ error));
+                    console.log("Failed to join group"+ error);
                 })
         }        
 
